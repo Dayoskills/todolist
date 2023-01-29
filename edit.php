@@ -2,35 +2,35 @@
 include('connection.php');
 
 if (isset($_GET['id']) && $_GET['id'] != '' ) {
-    // Get submitted form  
-    $id = $_GET['id'];
-    
-    // update
+// Get submitted form  
+$id = $_GET['id'];
+
+// update
 if (isset($_POST['update'])) {
 
-   // Get submitted form    
+// Get submitted form    
     $id = $_POST['id'];
-     $task_name = $_POST['task_name'];
+    $task_name = $_POST['task_name'];
+   
+    // check if task is empty
+        if (empty ($task_name)) {
+            $errors = "You must fill in the task";
         
-     // empty task
- if (empty ($task_name)) {
-     $errors = "You must fill in the task";
-        
-     } else {
-         // update query 
+        } else {
+        // update query 
         $sql4 = "UPDATE tasks SET task= '$task_name' WHERE id= '$id';";  
-         mysqli_query ($conn, $sql4);
+        mysqli_query ($conn, $sql4);
     
- if (mysqli_query($conn, $sql4) === TRUE) {
-         echo "Task Updated Successfully";
-         } else {
+        if (mysqli_query($conn, $sql4) === TRUE) {
+        echo "Task Updated Successfully";
+        } else {
             "Error Updating task: " . $sql4. "<br>" . mysqli_error($conn);
-         }
-          header("location: index.php");
-         }    
+        }
+        header("location: index.php");
+        }    
     }
 }
-// End Edit
+
 
 ?>
 
@@ -49,11 +49,10 @@ if (isset($_POST['update'])) {
         <h2>Todo List Application with PHP and MySQL</h2>
 </div>
 
-    <form action="edit.php" method= "POST">
-        <?php if (isset($errors)) { ?>
+    <form action="" method= "POST">
+    <?php if (isset($errors)) { ?>
         <p><?php echo $errors; ?></p> 
         <?php } ?>
-
         <input type="text" name="task_name" class="task_input" placeholder= "Enter task name ...">
         <br>
         <input type="hidden" name="id" value = "<?php echo $id; ?>" >

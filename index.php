@@ -8,6 +8,7 @@ if (isset($_POST['submit'])) {
     
     if (empty ($task)) {
     $errors = "You must fill in the task";
+    return;
     } else {
         $sql = "INSERT INTO tasks (task) VALUES ('$task'); ";   
         mysqli_query ($conn, $sql);
