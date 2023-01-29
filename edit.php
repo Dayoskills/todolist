@@ -12,7 +12,7 @@ if (isset($_POST['update'])) {
     $id = $_POST['id'];
     $task_name = $_POST['task_name'];
    
-    // check if task is empty..
+    // check if task is empty...
         if (empty ($task_name)) {
             $errors = "You must fill in the task";
         
