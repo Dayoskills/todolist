@@ -1,35 +1,27 @@
 <?php
+include('connection.php');
 $errors = "";
 
-// create connection to db
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "todolist";
-
-$conn = mysqli_connect ($servername, $username, $password, $dbname);
-
+// insert into database
 if (isset($_POST['submit'])) {
     $task = $_POST['task'];
-    $sql = "INSERT INTO tasks (task) VALUES ('$task'); ";
+    
     if (empty ($task)) {
-        $errors = "You must fill in the task";
+    $errors = "You must fill in the task";
     } else {
-    mysqli_query ($conn, $sql);
-    header("location: index.php");
+        $sql = "INSERT INTO tasks (task) VALUES ('$task'); ";   
+        mysqli_query ($conn, $sql);
+        header("location: index.php");
     }    
-}
+} 
 
 // delete task
 if (isset($_GET['del_task'])) {
     $id = $_GET['del_task'];
-    $sql3 = "DELETE FROM tasks WHERE id= $id";
-    mysqli_query ($conn, $sql3); 
+    $sql2 = "DELETE FROM tasks WHERE id= $id";
+    mysqli_query ($conn, $sql2); 
     header("location: index.php");
 }
-
-$sql2 = "SELECT * FROM tasks";
-$tasks = mysqli_query ($conn, $sql2);
 
 ?>
 
@@ -48,9 +40,9 @@ $tasks = mysqli_query ($conn, $sql2);
     </div>
 
     <form action="index.php" method="POST">
-    <?php if (isset($errors)) { ?>
+        <?php if (isset($errors)) { ?>
         <p><?php echo $errors; ?></p> 
-    <?php    } ?>
+        <?php    } ?>
         
         <input type="text" name="task" class="task_input">
         <button type="submit" name="submit" class="task_btn">Add Task</button>
@@ -66,21 +58,27 @@ $tasks = mysqli_query ($conn, $sql2);
         </thead>
 
         <tbody>
-        <?php $i = 1; while ($row = mysqli_fetch_array($tasks)) { ?>
+        <?php 
+            // select from database
+            $sql3 = "SELECT * FROM tasks";
+            $result = mysqli_query ($conn, $sql3);
+            $count = 1; while ($row = mysqli_fetch_array($result)) { ?>
+            
             <tr>   
-                <td><?php echo $i; ?></td>
+                <td><?php echo $count; ?></td>
                 <td class= "task"><?php echo $row['task']; ?></td>
+                
                 <td class="delete">
-                    <a href="index.php?del_task=<?php echo $row['id']; ?>">x</a>
-                </td>
+                    <a href="index.php?del_task=<?php echo $row['id']; ?>">Delete</a> 
+                    |
+                    <a href="edit.php?id=<?php echo $row['id']; ?>" type = "button">Edit</a> 
+                </td>   
             </tr>
 
-        <?php $i++; } ?>  
-            
-        
+        <?php $count++; } ?>  
+    
         </tbody>
     </table>
-
 
 </body>
 </html>
