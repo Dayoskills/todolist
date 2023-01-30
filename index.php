@@ -60,7 +60,7 @@ if (isset($_GET['del_task'])) {
 
         <tbody>
         <?php 
-            // select from database
+            // select from database...
             $sql3 = "SELECT * FROM tasks";
             $result = mysqli_query ($conn, $sql3);
             $count = 1; while ($row = mysqli_fetch_array($result)) { ?>
